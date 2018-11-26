@@ -1,4 +1,7 @@
-package br.eti.balduino.checkers;
+package br.eti.balduino.checkers.pieces;
+
+import br.eti.balduino.checkers.Color;
+import br.eti.balduino.checkers.Piece;
 
 import static br.eti.balduino.checkers.Color.BLACK;
 

@@ -1,5 +1,8 @@
 package br.eti.balduino.checkers;
 
+import br.eti.balduino.checkers.pieces.BlackPiece;
+import br.eti.balduino.checkers.pieces.WhitePiece;
+
 import java.util.ArrayList;
 import java.util.List;
 
