@@ -70,6 +70,7 @@ public class Board {
     public Piece getAt(final int row, final int column) {
         return (board.clone())[row][column];
     }
+
     public void println() {
         for(int r = 0; r < rows; r++) {
             System.out.println("+---+---+---+---+---+---+---+---+");

@@ -1,11 +1,13 @@
 package br.eti.balduino.checkers;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -186,6 +188,7 @@ public class CheckersTest {
         }
     }
 
+    @Disabled
     @Test
     @DisplayName("Sample game")
     public void testSampleGame() {
@@ -194,23 +197,35 @@ public class CheckersTest {
 
         while(true) {
             System.out.println("White plays");
-            List<Board> moves = board.getWhitePieces().get(0).getPossibleMovements();
+            List<Piece> whites = board.getWhitePieces();
             List<Board> allMovements = new ArrayList<>();
+
+            for (Piece piece : whites) {
+                allMovements.addAll(piece.getPossibleMovements());
+            }
+
+            if(allMovements.isEmpty()) {
+                System.out.println("Black wins");
+                break;
+            }
+
+            board = allMovements.get(new Random().nextInt(allMovements.size()));
+            board.println();
+
+            System.out.println("Black plays");
+            List<Piece> blacks = board.getBlackPieces();
+            allMovements.clear();
 
             for (Piece piece : blacks) {
                 allMovements.addAll(piece.getPossibleMovements());
             }
 
-            if(moves.isEmpty()) break;
+            if(allMovements.isEmpty()) {
+                System.out.println("White wins");
+                break;
+            }
 
-            System.out.println("Black plays");
-            board = moves.get(0);
-            board.println();
-
-            moves = board.getBlackPieces().get(0).getPossibleMovements();
-            if(moves.isEmpty()) break;
-
-            board = moves.get(0);
+            board = allMovements.get(new Random().nextInt(allMovements.size()));
             board.println();
         }
 
