@@ -16,7 +16,7 @@ public enum Color {
     WHITE {
         @Override
         public String toString() {
-            return ".";
+            return "o";
         }
     }
 }
