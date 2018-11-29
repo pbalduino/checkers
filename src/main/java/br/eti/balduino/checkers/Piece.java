@@ -31,21 +31,30 @@ public abstract class Piece {
 
     public abstract Color getColor();
 
-    public List<Board> getPossibleMovements() {
-        List<Board> movements = new ArrayList<>();
+    private boolean isValidPosition(final int row, final int column) {
+        return (row >= 0)
+                && (row < board.getRows())
+                && (column >= 0)
+                && (column < board.getColumns());
+    }
+
+    public List<Movement> getPossibleMovements() {
+        List<Movement> movements = new ArrayList<>();
 
         if(column > 0) {
             int newRow = row + direction.getValue();
             int newColumn = column - 1;
 
-            if(board.getAt(newRow, newColumn).getColor() == Color.NONE) {
-                movements.add(board.move(row, column, newRow, newColumn));
-            } else if (board.getAt(newRow, newColumn).getColor() != getColor()
-                    && board.getAt(newRow  + direction.getValue(), newColumn - 1).getColor() == Color.NONE
-                    && column > 1) {
-                movements.add(board
-                                .remove(newRow, newColumn)
-                                .move(row, column, newRow + direction.getValue(), newColumn - 1));
+            if(isValidPosition(newRow, newColumn)) {
+                if (board.getAt(newRow, newColumn).getColor() == Color.NONE) {
+                    movements.add(new Movement(row, column, newRow, newColumn, board, false));
+                } else if (newColumn > 0
+                        && board.getAt(newRow, newColumn).getColor() != getColor()
+                        && isValidPosition(newRow + direction.getValue(), newColumn - 1)
+                        && board.getAt(newRow + direction.getValue(), newColumn - 1).getColor() == Color.NONE
+                ) {
+                    movements.add(new Movement(row, column, newRow + direction.getValue(), newColumn - 1, board.remove(newRow, newColumn), true));
+                }
             }
         }
 
@@ -53,8 +62,16 @@ public abstract class Piece {
             int newRow = row + direction.getValue();
             int newColumn = column + 1;
 
-            if(board.getAt(newRow, newColumn).getColor() == Color.NONE) {
-                movements.add(board.move(row, column, newRow, newColumn));
+            if(isValidPosition(newRow, newColumn)) {
+                if (board.getAt(newRow, newColumn).getColor() == Color.NONE) {
+                    movements.add(new Movement(row, column, newRow, newColumn, board, false));
+                } else if (newColumn < 7
+                        && board.getAt(newRow, newColumn).getColor() != getColor()
+                        && isValidPosition(newRow + direction.getValue(), newColumn + 1)
+                        && board.getAt(newRow + direction.getValue(), newColumn + 1).getColor() == Color.NONE
+                ) {
+                    movements.add(new Movement(row, column, newRow + direction.getValue(), newColumn + 1, board.remove(newRow, newColumn), true));
+                }
             }
         }
 

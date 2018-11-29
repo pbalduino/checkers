@@ -75,7 +75,7 @@ public class CheckersTest {
 
         assertEquals(Color.WHITE, piece.getColor());
 
-        List<Board> movements = piece.getPossibleMovements();
+        List<Movement> movements = piece.getPossibleMovements();
 
         assertEquals(1, movements.size());
     }
@@ -87,7 +87,7 @@ public class CheckersTest {
 
         assertEquals(Color.WHITE, piece.getColor());
 
-        List<Board> movements = piece.getPossibleMovements();
+        List<Movement> movements = piece.getPossibleMovements();
 
         assertEquals(2, movements.size());
     }
@@ -99,7 +99,7 @@ public class CheckersTest {
 
         assertEquals(Color.BLACK, piece.getColor());
 
-        List<Board> movements = piece.getPossibleMovements();
+        List<Movement> movements = piece.getPossibleMovements();
 
         assertEquals(1, movements.size());
     }
@@ -111,7 +111,7 @@ public class CheckersTest {
 
         assertEquals(Color.BLACK, piece.getColor());
 
-        List<Board> movements = piece.getPossibleMovements();
+        List<Movement> movements = piece.getPossibleMovements();
 
         assertEquals(2, movements.size());
     }
@@ -123,7 +123,7 @@ public class CheckersTest {
 
         assertEquals(Color.WHITE, piece.getColor());
 
-        List<Board> movements = piece.getPossibleMovements();
+        List<Movement> movements = piece.getPossibleMovements();
 
         assertEquals(0, movements.size());
     }
@@ -135,7 +135,7 @@ public class CheckersTest {
 
         assertEquals(Color.BLACK, piece.getColor());
 
-        List<Board> movements = piece.getPossibleMovements();
+        List<Movement> movements = piece.getPossibleMovements();
 
         assertEquals(0, movements.size());
     }
@@ -144,7 +144,7 @@ public class CheckersTest {
     @DisplayName("White has seven initial possible movements")
     public void testWhiteHasSevenPossibleMovements() {
         List<Piece> whites = board.getWhitePieces();
-        List<Board> allMovements = new ArrayList<>();
+        List<Movement> allMovements = new ArrayList<>();
 
         for (Piece piece : whites) {
             allMovements.addAll(piece.getPossibleMovements());
@@ -157,7 +157,7 @@ public class CheckersTest {
     @DisplayName("Black has seven initial possible movements")
     public void testBlackHasSevenPossibleMovements() {
         List<Piece> blacks = board.getBlackPieces();
-        List<Board> allMovements = new ArrayList<>();
+        List<Movement> allMovements = new ArrayList<>();
 
         for (Piece piece : blacks) {
             allMovements.addAll(piece.getPossibleMovements());
@@ -177,14 +177,14 @@ public class CheckersTest {
         System.out.println("It's WHITE's turn");
         board.println();
 
-        List<Board> movements = board.getAt(3, 2).getPossibleMovements();
+        List<Movement> movements = board.getAt(3, 2).getPossibleMovements();
 
         System.out.println(movements.size() + " possible movements");
 
         int m = 1;
-        for(Board movement : movements) {
+        for(Movement movement : movements) {
             System.out.println("\nMovement " + m++);
-            movement.println();
+            movement.getNewBoard().println();
         }
     }
 
@@ -193,12 +193,13 @@ public class CheckersTest {
     @DisplayName("Sample game")
     public void testSampleGame() {
 
+        String[] headers = {"A", "B", "C", "D", "E", "F", "G", "H"};
+
         board.println();
 
         while(true) {
-            System.out.println("White plays");
             List<Piece> whites = board.getWhitePieces();
-            List<Board> allMovements = new ArrayList<>();
+            List<Movement> allMovements = new ArrayList<>();
 
             for (Piece piece : whites) {
                 allMovements.addAll(piece.getPossibleMovements());
@@ -209,10 +210,16 @@ public class CheckersTest {
                 break;
             }
 
-            board = allMovements.get(new Random().nextInt(allMovements.size()));
+            Movement movement = allMovements.get(new Random().nextInt(allMovements.size()));
+            board = movement.getNewBoard();
+            System.out.print("White plays");
+            System.out.println(" [" + movement.getFromRow()
+                    + "," + movement.getFromColumn()
+                    + "] -> [" + movement.getToRow()
+                    + "," + movement.getToColumn() + "]");
             board.println();
 
-            System.out.println("Black plays");
+
             List<Piece> blacks = board.getBlackPieces();
             allMovements.clear();
 
@@ -225,7 +232,13 @@ public class CheckersTest {
                 break;
             }
 
-            board = allMovements.get(new Random().nextInt(allMovements.size()));
+            movement = allMovements.get(new Random().nextInt(allMovements.size()));
+            board = movement.getNewBoard();
+            System.out.print("Black plays");
+            System.out.println(" " + headers[movement.getFromColumn()] + movement.getFromRow()
+                    + " -> "
+                    + headers[movement.getToColumn()] + movement.getToRow()
+            );
             board.println();
         }
 

@@ -68,18 +68,21 @@ public class Board {
     }
 
     public Piece getAt(final int row, final int column) {
+        assert row >= 0 : "Row: " + row;
         return (board.clone())[row][column];
     }
 
     public void println() {
+        System.out.println("  | A | B | C | D | E | F | G | H |");
         for(int r = 0; r < rows; r++) {
-            System.out.println("+---+---+---+---+---+---+---+---+");
+            System.out.println("--+---+---+---+---+---+---+---+---+");
+            System.out.print((r + 1) + " ");
             for(int c = 0; c < columns; c++) {
                 System.out.print("| " + getAt(r, c) + " ");
             }
             System.out.println("|");
         }
-        System.out.println("+---+---+---+---+---+---+---+---+\n");
+        System.out.println("--+---+---+---+---+---+---+---+---+\n");
     }
 
     Board move(int row, int column, int newRow, int newColumn) {
@@ -97,13 +100,21 @@ public class Board {
         return nb;
     }
 
-    public Board remove(int row, int column) {
+    Board remove(int row, int column) {
         int position = (row * 8) + column;
         String newSetup = setup.substring(0, position) + Color.NONE + setup.substring(position + 1);
 
         Board nb = new Board(rows, columns, newSetup);
 
         return nb;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
+    public int getRows() {
+        return rows;
     }
 
     @Override
